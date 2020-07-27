@@ -1,0 +1,10 @@
+{% extends 'BusBooking/base.html' %}
+{% block content %}
+<form  style="margin:0 500px;" class="form-container" action="{% url 'add_route' %}" method="post">
+  {% csrf_token %}
+  <h1><center><b>Add New Route</b></center></h1>
+  {{form}}
+  <input class="btn" type="submit" value="Submit">
+  <button class="btn cancel" onclick="location.href='{% url 'view_home' %}'">Cancel</button>
+</form>
+{% endblock %}

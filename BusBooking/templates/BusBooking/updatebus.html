@@ -1,0 +1,60 @@
+{% extends 'BusBooking/base.html' %}
+{% block content %}
+<label><h3><b>Select Bus_number</b></h3></label>
+   	<select class="form-control" style="width:20%;" id = "bus" name="bus_no">
+   		<option selected="true" disabled="disabled">Select Bus No.</option>
+   		{% for i in all_buses %}
+   			<option value = {{i.Bus_number}}>{{i.Bus_number}}</option>
+   		{% endfor %}
+   	</select>
+
+    <div class="col-9" id = "bus_info">
+  </div>
+
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#bus").change(function(e){
+   e.preventDefault();
+   var bus_no = $(this).val();
+   var data = {bus_no};
+   $.ajax({
+     type : 'GET',
+     url :  "{% url 'get_user_info' %}",
+     data : data,
+     success : function(response){
+       $("#bus_info").html(`
+       <div class="form-container">
+       <form action="{% url 'update_bus' 'submit'  %}">
+         {% csrf_token %}
+         <label><b>Bus Number:</b></label>
+         <input type="number" name="bus_no" value="${response.bus_info.Bus_no}" readonly>
+         <label><b>Old Route:</b></label>
+         <input type="text" name="oldroute" value="${response.bus_info.Route_id}-${response.bus_info.Bus_from}-${response.bus_info.Bus_to}" disabled><br>
+         <label><b>Change New Route:</b></label>
+         <select id="route" name="newroute">
+         <option selected="true" disabled="disabled">Select New Bus Route</option>
+         {% for i in all_routes %}
+         <option value="{{i.Route_id}}">{{i.Route_id}}:{{i.Bus_from}}-{{i.Bus_to}}</option>
+         {% endfor %}
+         </select><br>
+        <label><b>Start time :</b></label>
+       <input type="number" name="hours" min="0" max="23" value="${response.bus_info.hrs}">
+       <input type="number" name="minutes" min="0" max="59" value="${response.bus_info.mins}"><br>
+       <label><b>Total seats :</b></label>
+       <input type="number" name="seats" value="${response.bus_info.Total_seats}">
+       <input class="btn" type="submit" value="Update">
+       </form>
+       <button class="btn cancel" onclick="location.href='{% url 'view_home' %}'">Cancel</button>
+      </div>
+       `)
+     },
+     error : function(response){
+       console.log(response)
+     }
+   })
+  })
+})
+</script>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'BusBooking/base.html' %}
+{% block content %}
+<button class="open-button" onclick="openFormadmin()">ADMIN</button>
+<button class="open-button" onclick="location.href='{% url 'new_user' %}'">NEW USER</button>
+<button class="open-button" onclick="userlogin()">EXISTING USER</button>
+<div class="form-popup" id="myFormadmin">
+  <form action="{% url 'admin_check' %}" class="form-container" method="post">
+   {% csrf_token %}
+    <h1>Admin Login</h1>
+
+    <label for="username"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="username" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+
+    <button type="submit" class="btn">Login</button>
+    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+  </form>
+</div>
+<div class="form-popup" id="userlogin">
+  <form action="{% url 'user_login' %}" class="form-container" method="post">
+   {% csrf_token %}
+    <h1>User Login</h1>
+
+    <label for="username"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="username" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+
+    <button type="submit" class="btn">Login</button>
+    <button type="button" class="btn cancel" onclick="closeloginForm()">Close</button>
+  </form>
+</div>
+<script>
+  function openFormadmin() {
+    document.getElementById("myFormadmin").style.display = "block";
+  }
+  function closeForm() {
+    document.getElementById("myFormadmin").style.display = "none";
+  }
+  function userlogin(){
+    document.getElementById("userlogin").style.display = "block";
+  }
+  function closeloginForm() {
+    document.getElementById("userlogin").style.display = "none";
+  }
+
+</script>
+
+{% if pass_error %}
+<script>alert("Login error! Password incorrect")</script>
+{% endif %}
+
+{% if user_error %}
+<script>alert("Username does not exists!")</script>
+{% endif %}
+
+{% if thanks %}
+<script>alert("Thanks for visiting , please come again :)")</script>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends 'BusBooking/base.html' %}
+{% block content %}
+<label><b>From:</b></label>
+  <select class="form-control" style="width:20%;" id="bus-from" name="bus_from">
+    <option selected="true" disabled="disabled">Select..</option>
+    {% for i in all_routes %}
+      <option value = {{i.Bus_from}}>{{i.Bus_from}}</option>
+    {% endfor %}
+  </select><br>
+  <label><b>To:</b></label>
+  <select class="form-control" style="width:20%;" id="bus-to" name="bus_to">
+    <option selected="true" disabled="disabled">Select..</option>
+    {% for i in all_routes %}
+      <option value = {{i.Bus_to}}>{{i.Bus_to}}</option>
+    {% endfor %}
+  </select><br>
+  <button class="open-button" id="searchbutton" onclick="getinputvalues()">Search</button>
+
+<div id ="buses_info" >
+  <select id="bus_list" style="display:none;width:20%;">
+    <option selected="true" disabled="disabled">Select Bus No.</option>
+  </select>
+
+</div>
+<div id="bus_info">
+</div>
+
+</div>
+{% endblock %}
+{% block script %}
+<script>
+
+  function getinputvalues(){
+    var bus_list = document.getElementById('bus_list');
+    $(document).ready(function(){
+      bus_list.style.display = "none";
+    });
+    var bus_list = document.getElementById('bus_list');
+      var length = bus_list.options.length;
+      for(i=length-1;i>0;i--){
+        bus_list.options[i] = null;
+      }
+    var busFrom = document.getElementById("bus-from").value;
+    var busTo = document.getElementById("bus-to").value;
+    var data = {busFrom,busTo};
+    var ajaxResult=[];
+
+    $.ajax({
+      type : 'GET',
+      url : "{% url 'get_buses_info' %}",
+      data : data,
+      success : function(response){
+        bus_list.style.display = "block";
+        if(response.buses_info.length==0){
+          var option = document.createElement("option");
+          option.text = 'No buses found';
+          bus_list.add(option);
+          var h=document.getElementById("bus_info");
+          h.style.display = "none";
+        }
+        else{
+          var h=document.getElementById("bus_info");
+          h.style.display = "block";
+        for(var i=0;i<response.buses_info.length;i++){
+          var option = document.createElement("option");
+          option.text = `${response.buses_info[i].Bus_no}`;
+          bus_list.add(option);
+        }
+      }
+    }
+    })
+
+  }
+
+
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#bus_list").change(function(e){
+   e.preventDefault();
+   var bus_no = $(this).val();
+   var data = {bus_no};
+   $.ajax({
+     type : 'GET',
+     url :  "{% url 'get_user_info' %}",
+     data : data,
+     success : function(response){
+       $("#bus_info").html(`
+       <div class="form-container">
+       <form onsubmit="f1(event);"  action="{% url 'book_tickets' name %}" method="post" id="busForm">
+         {% csrf_token %}
+         <label><b>Passenger Name:</b></label>
+         <input type="text" id="passenger_name" name="passenger_name" required>
+         <label><b>Bus Number:</b></label>
+         <input type="number" id="bus_no" name="bus_no" value="${response.bus_info.Bus_no}" readonly>
+         <label><b>Start time :</b></label>
+        <input type="number" id="hrs" name="hours" min="0" max="23" value="${response.bus_info.hrs}" readonly>
+        <input type="number" id="mins" name="minutes" min="0" max="59" value="${response.bus_info.mins}" readonly><br>
+        <label><b>Journey Time:</b></label>
+        <input type="number" id="journey_time" name="journey_time" value="${response.bus_info.Journey_time}" readonly>
+        <label><b>Price per seat:</b></label>
+        <input type="number" id="price_per_seat" name="price_per_seat" value="${response.bus_info.Price_per_seat}" readonly>
+        <label><b>Total seats :</b></label>
+        <input type="number" id="total_seats" name="seats" value="${response.bus_info.Total_seats}" readonly>
+        <label><b>Travel Date : </b></label>
+        <input type="date" id="traveldate" name="traveldate" required><br>
+        <label><b>No. of Seats</b></label>
+       <input type="number" id="seats" name="seating" min="1" max="32" id="seats" required>
+       <input class="btn" type="submit" value="Book Ticket">
+       </form>
+       <button class="btn cancel" onclick="location.href='{% url 'view_home' %}'">Cancel</button>
+      </div>      `)
+
+
+     },
+     error : function(response){
+       console.log(response)
+     }
+   })
+  })
+})
+function f1(e){
+e.preventDefault();
+var name=document.getElementById("passenger_name").value;
+var bus_no=document.getElementById("bus_no").value;
+var hrs=document.getElementById("hrs").value;
+var mins=document.getElementById("mins").value;
+var journey_time=document.getElementById("journey_time").value;
+var price_per_seat=document.getElementById("price_per_seat").value;
+var traveldate=document.getElementById("traveldate").value;
+var seats=document.getElementById("seats").value;
+var amount=price_per_seat*seats;
+var s="Name : "+name+"\n"+"Bus No. : "+bus_no+"\n"+"Starting Time : "+hrs+"."+mins+"\n"+"Travel Date : "+traveldate+"\n"+"Total Seats : "+seats+"\n"+"\n"+"Total amount : "+amount+"\n"+"\n"+"ARE YOU SURE ? PRESS OK";
+var form = document.getElementById("busForm")
+if (confirm(s)) {
+		form.submit();
+	}
+	else{
+		window.history.go(-1);
+	}
+  }
+</script>
+
+
+{% endblock %}

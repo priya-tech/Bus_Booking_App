@@ -1,0 +1,21 @@
+{% extends 'BusBooking/base.html' %}
+{% block content %}
+<div class="ticket">
+{% if transactions %}
+{% for i in transactions %}
+  <h3>Booking History - {{forloop.counter}}</h3>
+<p>Bus Number : {{i.Bus_details.Bus_number}}</p>
+<p>Passenger name: {{i.Passenger_name}}</p>
+<p>Travel from : {{i.Bus_details.Route.Bus_from}}</p>
+<p>Travel to : {{i.Bus_details.Route.Bus_to}}</p>
+<p>Bus Starting Time : {{i.Bus_details.Start_time}}</p>
+<p>Travelled Date : {{i.Travel_date}}</p>
+<p>No. of Passengers Travelled : {{i.No_of_passengers}}</p>
+<hr>
+{% endfor %}
+{% else %}
+<p>You have no transactions yet. Please book the tickets soon for enjoying your trip ;)</p>
+{% endif %}
+</div>
+<button class="open-button" style="background-color:red;" onclick="location.href='{% url 'view_home' %}'">EXIT</button><br><br>
+{% endblock %}

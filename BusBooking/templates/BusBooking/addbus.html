@@ -1,0 +1,33 @@
+{% extends 'BusBooking/base.html' %}
+{% block content %}
+<form style="margin:0 500px;" class="form-container" action="{% url 'add_bus' %}" method="post">
+  {% csrf_token %}
+  <h1><center><b>Add New Bus</b></center></h1>
+  <label><b>Bus Number:</b></label>
+  <input type="number" name="bus_no" required><br>
+  <label ><b>Route:</b></label>
+    <select id="route" name="route">
+    <option selected="true" disabled="disabled">Select Bus Route</option>
+    {% for i in all_routes %}
+    <option value="{{i.Route_id}}">{{i.Route_id}}:{{i.Bus_from}}-{{i.Bus_to}}</option>
+    {% endfor %}
+    </select><br>
+    <label><b>Start Time:</b></label>
+    <select name="hours">
+      <option selected="true" disabled="disabled">Hrs</option>
+      {% for i in hours %}
+            <option value={{ i }}>{{ i }}</option>
+    {% endfor %}
+    </select>
+    <select name="minutes">
+      <option selected="true" disabled="disabled">Mins</option>
+      {% for i in minutes %}
+            <option value={{ i }}>{{ i }}</option>
+    {% endfor %}
+    </select>
+    <label><b>Total Seats:</b></label>
+    <input type="number" name="total_seats" ><br>
+    <input class="btn" type="submit" value="Submit">
+    <button class="btn cancel" onclick="location.href='{% url 'view_home' %}'">Cancel</button>
+    </form>
+{% endblock %}

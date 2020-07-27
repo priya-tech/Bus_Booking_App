@@ -1,0 +1,7 @@
+{% extends 'BusBooking/base.html' %}
+{% block content %}
+<h1>Welcome-{{name}}</h1>
+<button class="open-button" onclick="location.href='{% url 'booking' name %}'">BUS BOOKING</button><br><br>
+<button class="open-button" onclick="location.href='{% url 'booking_history' name %}'">BOOKING HISTORY</button><br><br>
+<button class="open-button" onclick="location.href='{% url 'view_home' %}'">EXIT</button><br><br>
+{% endblock %}

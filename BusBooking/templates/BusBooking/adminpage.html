@@ -1,0 +1,54 @@
+{% extends 'BusBooking/base.html' %}
+{% block content %}
+<button class="open-button" onclick="location.href='{% url 'add_bus' %}'">ADD NEW BUSES</button>
+<button class="open-button" onclick="location.href='{% url 'add_route' %}'">ADD NEW ROUTES</button><br><br>
+<button class="open-button" onclick="location.href='{% url 'update_bus' 'edit' %}'">UPDATE BUS DETAILS</button>
+<button class="open-button" onclick="deleteBus()">DELETE BUS</button><br><br>
+<button class="open-button" onclick="deleteRoute()" >DELETE ROUTE</button>
+<button class="open-button" onclick="location.href='{% url 'view_home' %}'">EXIT</button>
+
+<div class="form-popup" id="delete-bus">
+  <form class="form-container" action="{% url 'delete_bus' %}" method="get">
+    {% csrf_token %}
+    <h1>Delete Bus</h1>
+    <p>select bus to delete :</p>
+    <select id="bus" name="bus_no">
+    <option selected="true" disabled="disabled">Select Bus</option>
+    {% for i in all_buses %}
+    <option value="{{i.Bus_number}}">{{i.Bus_number}}</option>
+    {% endfor %}
+    </select><br>
+    <button type="submit" class="btn">Delete Bus</button>
+    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+  </form>
+</div>
+<div class="form-popup" id="delete-bus-route">
+  <form class="form-container" action="{% url 'delete_route' %}" method="get">
+    {% csrf_token %}
+    <h1>Delete Route</h1>
+    <p>select route to delete :</p>
+    <select id="route" name="route">
+    <option selected="true" disabled="disabled">Select Bus Route</option>
+    {% for i in all_routes %}
+    <option value="{{i.Route_id}}">{{i.Route_id}}:{{i.Bus_from}}-{{i.Bus_to}}</option>
+    {% endfor %}
+    </select><br>
+    <button type="submit" class="btn">Delete Route</button>
+    <button type="button" class="btn cancel" onclick="closeRouteForm()">Close</button>
+  </form>
+</div>
+<script>
+  function deleteBus() {
+    document.getElementById("delete-bus").style.display = "block";
+  }
+  function closeForm(){
+    document.getElementById("delete-bus").style.display = "none";
+  }
+  function deleteRoute() {
+    document.getElementById("delete-bus-route").style.display = "block";
+  }
+  function closeRouteForm(){
+    document.getElementById("delete-bus-route").style.display = "none";
+  }
+</script>
+{% endblock %}
