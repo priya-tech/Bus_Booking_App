@@ -10,7 +10,7 @@ Brlapi==0.6.7
 certifi==2018.8.24
 chardet==3.0.4
 command-not-found==0.3
-cryptography==2.3
+cryptography==3.2
 cssselect==1.1.0
 cupshelpers==1.0
 cycler==0.10.0
