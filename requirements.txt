@@ -73,7 +73,7 @@ parsel==1.5.2
 parso==0.7.0
 pexpect==4.6.0
 pickleshare==0.7.5
-Pillow==5.4.1
+Pillow==8.1.1
 plotly==4.7.1
 prometheus-client==0.7.1
 prompt-toolkit==3.0.5
