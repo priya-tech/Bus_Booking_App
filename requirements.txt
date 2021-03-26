@@ -96,7 +96,7 @@ python-debian==0.1.34
 python-slugify==4.0.0
 pytz==2018.9
 pyxdg==0.25
-PyYAML==3.13
+PyYAML==5.4
 pyzmq==19.0.1
 reportlab==3.5.18
 requests==2.21.0
