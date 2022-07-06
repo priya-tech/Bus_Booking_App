@@ -51,7 +51,7 @@ lazr.restfulclient==0.14.2
 lazr.uri==1.0.3
 length==1.0.1
 louis==3.8.0
-lxml==4.5.0
+lxml==4.9.1
 macaroonbakery==1.2.1
 Mako==1.0.7
 Markdown==3.2.2
