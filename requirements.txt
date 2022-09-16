@@ -53,7 +53,7 @@ length==1.0.1
 louis==3.8.0
 lxml==4.5.0
 macaroonbakery==1.2.1
-Mako==1.0.7
+Mako==1.2.2
 Markdown==3.2.2
 MarkupSafe==1.1.0
 matplotlib==3.2.1
